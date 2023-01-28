@@ -15,7 +15,6 @@
 				"-L${workspaceFolder}/dependencies/library",
 				"${workspaceFolder}/*.cpp",
 				"${workspaceFolder}/glad.c",
-				"${workspaceFolder}/dependencies/include/glad/glad.h",
 				"${workspaceFolder}/dependencies/library/libglfw.3.3.dylib",
 				"-o",
 				"${fileDirname}/application",

@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/natty22q/codestiffs3d/open_gl_vsc",
-      "program": "/Users/natty22q/codestiffs3d/open_gl_vsc/build/Debug/outDebug"
+      "cwd": "/Users/natty22q/codestiffs3d/11q_combat_simulator",
+      "program": "/Users/natty22q/codestiffs3d/11q_combat_simulator/build/Debug/outDebug"
     }
   ]
 }

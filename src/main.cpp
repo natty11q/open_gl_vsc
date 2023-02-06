@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 #include <iostream>
 #include "global.hpp"
@@ -70,20 +71,21 @@ int main(int argc,const char* argv[]) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
 
+
     // verticies for triangle -------------------------------------- //
 
-    GLfloat verticies[] =
+    float verticies[] =
     {
-        -0.5f , -0.5f * float(sqrt(3)) / 3  , 0.0f,
+       -0.5f  , -0.5f * float(sqrt(3)) / 3  , 0.0f,
         0.5f  , -0.5f * float(sqrt(3)) / 3  , 0.0f,
         0.0f  ,  0.5f * float(sqrt(3)) * 2/3, 0.0f,
-    };
+    }; 
 
     // init the window --------------------------------------------- //
     
     GLFWwindow* window;
 
-    if (!fullscreen){window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_WIDTH, "Enumeration praime", NULL, NULL);}  // create the window
+    if (!fullscreen){window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_WIDTH, "Enumeration praime updt", NULL, NULL);}  // create the window
     else {window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_WIDTH, "Enumeration praime", primary_monitor, NULL);}  // <- if fullscreen
 
     
@@ -94,9 +96,16 @@ int main(int argc,const char* argv[]) {
     }
     glfwMakeContextCurrent(window);                                  // add window to current context
 
+
     // load glad --------------------------------------------------- //
 
-    gladLoadGL();
+    //    gladLoadGL();
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
 
 
 
@@ -104,25 +113,49 @@ int main(int argc,const char* argv[]) {
 
 
 
-    GLuint Vertex_Shader = glCreateShader(GL_VERTEX_SHADER);         // crete vertex shader 
+    unsigned int Vertex_Shader = glCreateShader(GL_VERTEX_SHADER);         // crete vertex shader 
     glShaderSource(Vertex_Shader, 1, &vertexShaderSource, NULL);
     glCompileShader(Vertex_Shader);                                  // compile the code to be understood by gpu
 
-    GLuint Fragment_Shader = glCreateShader(GL_FRAGMENT_SHADER);     // create fragment shader
-    glShaderSource(Fragment_Shader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(Fragment_Shader);                                // compile
+    int success;
+    char infoLog[512];
+    glGetShaderiv(Vertex_Shader, GL_COMPILE_STATUS, &success);
 
-    GLuint shaderProgram = glCreateProgram();                        // wrap the shaders into shaderprogram so that they can be used
+    if (!success) {
+        glGetShaderInfoLog(Vertex_Shader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+
+    unsigned int Fragment_Shader = glCreateShader(GL_FRAGMENT_SHADER);     // create fragment shader
+    glShaderSource(Fragment_Shader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(Fragment_Shader);                             // compile
+
+    glGetShaderiv(Fragment_Shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(Fragment_Shader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    
+
+    unsigned int shaderProgram = glCreateProgram();                        // wrap the shaders into shaderprogram so that they can be used
 
     glAttachShader(shaderProgram, Vertex_Shader);
     glAttachShader(shaderProgram, Fragment_Shader);
     glLinkProgram(shaderProgram);
 
+    // check for linking errors
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+    }
+
     glDeleteShader(Vertex_Shader);
     glDeleteShader(Fragment_Shader);
 
 
-    GLuint VAO, VBO;
+    unsigned int VAO, VBO;
 
     glGenVertexArrays(1 , &VAO);
     glGenBuffers(1, &VBO);
@@ -134,7 +167,10 @@ int main(int argc,const char* argv[]) {
 
 
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0); // <- oi
+    
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     glBindVertexArray(0);
 
 
@@ -169,8 +205,8 @@ int main(int argc,const char* argv[]) {
     glDeleteBuffers(1, &VBO);
     glfwDestroyWindow(window);
     glfwTerminate();
-    std::cout<< "press enter to quit" <<std::endl;
-    std::cin.get();
+    // std::cout<< "press enter to quit" <<std::endl;
+    // std::cin.get();
 
     return 0;
 }

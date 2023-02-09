@@ -19,7 +19,7 @@
 				// "${workspaceFolder}/recources/shaders/*.vert",
 				"${workspaceFolder}/dependencies/library/libglfw.3.3.dylib",
 				"-o",
-				"${workspaceFolder}/.outputs/product_0-0-2",
+				"${workspaceFolder}/.outputs/product_0-0-3",
 				"-framework",
 				"OpenGL",
 				"-framework",

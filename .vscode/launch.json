@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/natty22q/codestiffs/Cpp/games/11q_combat_simulator",
-      "program": "/Users/natty22q/codestiffs/Cpp/games/11q_combat_simulator/build/Debug/outDebug"
+      "cwd": "/Users/natty22q/codestuffs/Cpp/games/11q_combat_simulator",
+      "program": "/Users/natty22q/codestuffs/Cpp/games/11q_combat_simulator/build/Debug/outDebug"
     }
   ]
 }

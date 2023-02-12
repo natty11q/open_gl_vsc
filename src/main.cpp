@@ -17,29 +17,42 @@ namespace fs = std::filesystem;
 #include"../header_files/VBO.h"
 #include"../header_files/EBO.h"
 #include"../header_files/Camera.h"
+#include"../header_files/lightmotion.h"
 
-
-
-const int SCREEN_WIDTH  = 450;
-const int SCREEN_HEIGHT = 450;
+int SCREEN_WIDTH  = 700;
+int SCREEN_HEIGHT = 700;
 
 
 
 
 // Vertices coordinates
-GLfloat vertices[] =
+GLfloat Floor_vertices[] =
 { //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
-	-1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
-	-1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-	 1.0f, 0.0f, -1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
-	 1.0f, 0.0f,  1.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
+	-4.0f, 0.0f,  4.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+	-4.0f, 0.0f, -4.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	 4.0f, 0.0f, -4.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	 4.0f, 0.0f,  4.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
+};
+
+GLfloat Wall_vertices[] =
+{ //     COORDINATES     /        COLORS        /    TexCoord    /       NORMALS     //
+	-4.0f, 0.0f,  4.0f,		0.0f, 0.0f, 0.0f,		0.0f, 0.0f,		0.0f, 1.0f, 0.0f,
+	-4.0f, 0.0f, -4.0f,		0.0f, 0.0f, 0.0f,		0.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	-4.0f, 4.0f,  4.0f,		0.0f, 0.0f, 0.0f,		1.0f, 1.0f,		0.0f, 1.0f, 0.0f,
+	-4.0f, 4.0f, -4.0f,		0.0f, 0.0f, 0.0f,		1.0f, 0.0f,		0.0f, 1.0f, 0.0f
 };
 
 // Indices for vertices order
-GLuint indices[] =
+GLuint Floor_indices[] =
 {
 	0, 1, 2,
 	0, 2, 3
+};
+
+GLuint Wall_indices[] = 
+{
+	0,1,2,
+	1,2,3
 };
 
 GLfloat lightVertices[] =
@@ -89,11 +102,11 @@ int main()
     #endif
 
 	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "11q combat simulator main", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "∑numeral ENGINE main", NULL, NULL);
 	// Error check if the window fails to create
 	if (window == NULL)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		std::cout << "Fat fail! no window D:" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
@@ -115,18 +128,37 @@ int main()
 	VAO VAO1;
 	VAO1.Bind();
 	// Generates Vertex Buffer Object and links it to vertices
-	VBO VBO1(vertices, sizeof(vertices));
+	VBO VBO1(Floor_vertices, sizeof(Floor_vertices));	
 	// Generates Element Buffer Object and links it to indices
-	EBO EBO1(indices, sizeof(indices));
+	EBO EBO1(Floor_indices, sizeof(Floor_indices));
 	// Links VBO attributes such as coordinates and colors to VAO
+
 	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
 	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
 	VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
 	VAO1.LinkAttrib(VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
+		
+
 	// Unbind all to prevent accidentally modifying them
 	VAO1.Unbind();
 	VBO1.Unbind();
 	EBO1.Unbind();
+	
+	VAO VAO2;
+	VAO2.Bind();
+
+	VBO VBO2(Wall_vertices, sizeof(Wall_vertices));
+	EBO EBO2(Wall_indices, sizeof(Wall_indices));
+
+	VAO2.LinkAttrib(VBO2, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
+	VAO2.LinkAttrib(VBO2, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
+	VAO2.LinkAttrib(VBO2, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+	VAO2.LinkAttrib(VBO2, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
+
+	VAO2.Unbind();
+	VBO2.Unbind();
+	EBO2.Unbind();
+
 
 
 	// Shader for light cube
@@ -146,14 +178,14 @@ int main()
 	lightVBO.Unbind();
 	lightEBO.Unbind();
 
+	float light_x = 0.5f;float light_y = 1.0f;float light_z = 0.5f;
 
-
-	glm::vec4 lightColor = glm::vec4(0.07f, 0.8f, 1.0f, 1.0f);
-	glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
-	glm::mat4 lightModel = glm::mat4(1.0f);
+	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	glm::vec3 lightPos = glm::vec3(0.5f, 1.0f, 0.5f);
+	glm::mat4 lightModel = glm::mat4(2.0f);
 	lightModel = glm::translate(lightModel, lightPos);
 
-	glm::vec3 objectPos = glm::vec3(0.5f, 0.5f, 0.5f);
+	glm::vec3 objectPos = glm::vec3(0.0, 0.0f, 0.0);
 	glm::mat4 objectModel = glm::mat4(1.0f);
 	objectModel = glm::translate(objectModel, objectPos);
 
@@ -168,12 +200,6 @@ int main()
 
 
 
-	/*
-	* I'm doing this relative path thing in order to centralize all the resources into one folder and not
-	* duplicate them between tutorial folders. You can just copy paste the resources from the 'Resources'
-	* folder and then give a relative path from this folder to whatever resource you want to get to.
-	* Also note that this requires C++17, so go to Project Properties, C/C++, Language, and select C++17
-	*/
 	std::string parentDir = (fs::current_path().fs::path::parent_path()).string();
 	std::string texPath = "/Users/natty22q/codestuffs/Cpp/games/11q_combat_simulator/recources/textures/";
 
@@ -183,11 +209,6 @@ int main()
 	Texture planksSpec((texPath + "planksSpec.png").c_str(), GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
 	planksSpec.texUnit(shaderProgram, "tex1", 1);
 
-	// Original code from the tutorial
-	/*Texture planksTex("planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
-	planksTex.texUnit(shaderProgram, "tex0", 0);
-	Texture planksSpec("planksSpec.png", GL_TEXTURE_2D, 1, GL_RED, GL_UNSIGNED_BYTE);
-	planksSpec.texUnit(shaderProgram, "tex1", 1);*/
 
 
 
@@ -195,13 +216,31 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	// Creates camera object
-	Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+	Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	// Main while loop
 	while (!glfwWindowShouldClose(window))
 	{
-		// Specify the color of the background
-		glClearColor(0.01f, 0.01f, 0.01f, 1.0f);
+		ChangeLightPos(window,&light_x,&light_y,&light_z);
+
+		glm::vec3 lightPos = glm::vec3(light_x, light_y, light_z);
+		glm::mat4 lightModel = glm::mat4(2.0f);
+		lightModel = glm::translate(lightModel, lightPos);
+
+		glm::vec3 objectPos = glm::vec3(0.1f, -0.6f, 0.1f);
+		glm::mat4 objectModel = glm::mat4(1.0f);
+		objectModel = glm::translate(objectModel, objectPos);
+
+
+		lightShader.Activate();
+		glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+		glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+		shaderProgram.Activate();
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(objectModel));
+		glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+			// Specify the color of the background
+		glClearColor(0.25f, 0.45f, 0.4f, 1.0f);
 		// Clean the back buffer and depth buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -222,10 +261,14 @@ int main()
 		planksSpec.Bind();
 		// Bind the VAO so OpenGL knows to use it
 		VAO1.Bind();
+		
 		// Draw primitives, number of indices, datatype of indices, index of indices
-		glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, sizeof(Floor_indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
+		
+		VAO2.Bind();
 
+		glDrawElements(GL_TRIANGLES, sizeof(Wall_indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
 		// Tells OpenGL which Shader Program we want to use
 		lightShader.Activate();
@@ -243,6 +286,11 @@ int main()
 		glfwPollEvents();
 	}
 
+	// void resise_window(int* width, int* height)
+	// {
+	// 	glfwGetWindowSize(window,width,height);
+	// 	glfwGetWindowSize(window,width,height);
+	// }
 
 
 	// Delete all the objects we've created

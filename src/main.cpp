@@ -19,7 +19,7 @@ namespace fs = std::filesystem;
 #include"../header_files/Camera.h"
 #include"../header_files/lightmotion.h"
 
-int SCREEN_WIDTH  = 700;
+int SCREEN_WIDTH  = 1200;
 int SCREEN_HEIGHT = 700;
 
 
@@ -83,8 +83,36 @@ GLuint lightIndices[] =
 	4, 6, 7
 };
 
+GLfloat cubeVertices[] =
+{ //     COORDINATES     //
+	-0.1f, -0.1f,  0.1f,
+	-0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f,  0.1f
+};
 
-int main()
+GLuint cubeIndices[] =
+{
+	0, 1, 2,
+	0, 2, 3,
+	0, 4, 7,
+	0, 7, 3,
+	3, 7, 6,
+	3, 6, 2,
+	2, 6, 5,
+	2, 5, 1,
+	1, 5, 4,
+	1, 4, 0,
+	4, 5, 6,
+	4, 6, 7
+};
+
+
+int main(int argc,const char* argv[])
 {
 	// Initialize GLFW
 	glfwInit();
@@ -101,7 +129,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
 
-	// Create a GLFWwindow object of 800 by 800 pixels, naming it "YoutubeOpenGL"
+	// Create a GLFWwindow object
 	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "∑numeral ENGINE main", NULL, NULL);
 	// Error check if the window fails to create
 	if (window == NULL)
@@ -144,6 +172,7 @@ int main()
 	VBO1.Unbind();
 	EBO1.Unbind();
 	
+
 	VAO VAO2;
 	VAO2.Bind();
 

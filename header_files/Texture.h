@@ -9,6 +9,7 @@
 class Texture
 {
 public:
+
 	GLuint ID;
 	GLenum type;
 	GLuint unit;
